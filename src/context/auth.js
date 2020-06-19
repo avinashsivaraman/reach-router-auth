@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate, navigate } from '@reach/router'
 
 const AuthContext = React.createContext()
 
@@ -8,16 +9,26 @@ function AuthProvider(props) {
 
   useEffect(() => {
     // TODO check whether the user is authenticated using JWT or other mechanism
-    setTimeout(() => {
-      setAuth(true)
-      setUser({ id: 1, name: 'Avinash Sivaraman' })
-    }, 2000)
+    console.log('Loaded Auth Provider')
+    console.log(
+      'Check with Backend when the page is loaded and set the auth state accordingly'
+    )
   }, [])
 
-  const login = (user) => setUser(user)
-  const register = (user) => {
-    // TODO register the user
+  const login = (user, redirectURL) => {
+    setAuth(true)
     setUser(user)
+    if (redirectURL) {
+      navigate(redirectURL)
+    }
+  }
+  const register = (user, redirectURL) => {
+    // TODO register the user
+    setAuth(true)
+    setUser(user)
+    if (redirectURL) {
+      navigate(redirectURL)
+    }
   }
   const logout = () => {
     setAuth(false)
