@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, navigate } from '@reach/router'
+import { navigate } from '@reach/router'
 
 const AuthContext = React.createContext()
 
@@ -15,9 +15,20 @@ function AuthProvider(props) {
     )
   }, [])
 
-  const login = (user, redirectURL) => {
+  const login = async (user, redirectURL) => {
+    // TODO: API call for Login
+    const request = await fetch('https://randomuser.me/api')
+    const data = await request.json()
+    const {
+      id: { value },
+      name: { first, last },
+    } = data.results[0]
+    const newUser = {
+      id: value,
+      name: `${first} ${last}`,
+    }
     setAuth(true)
-    setUser(user)
+    setUser(newUser)
     if (redirectURL) {
       navigate(redirectURL)
     }
@@ -34,10 +45,10 @@ function AuthProvider(props) {
     setAuth(false)
     setUser({})
   }
-  const isLoggedIn = () => user !== {}
+
   return (
     <AuthContext.Provider
-      value={{ user, login, authenticated, register, logout, isLoggedIn }}
+      value={{ user, login, authenticated, register, logout }}
       {...props}
     />
   )
